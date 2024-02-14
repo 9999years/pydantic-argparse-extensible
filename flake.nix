@@ -28,14 +28,14 @@
       ];
       localPkgs = pkgs.callPackage ./nix/makePackages.nix {};
     in {
-      default = localPkgs.argparse-pydantic;
+      default = localPkgs.pydantic-argparse-extensible;
       inherit
         (localPkgs)
-        argparse-pydantic
+        pydantic-argparse-extensible
         get-project-version
         make-release-commit
         ;
-      inherit (localPkgs.argparse-pydantic) dist;
+      inherit (localPkgs.pydantic-argparse-extensible) dist;
     });
 
     checks = forAllSystems (system: self.packages.${system}.default.checks);

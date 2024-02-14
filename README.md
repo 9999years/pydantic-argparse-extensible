@@ -1,15 +1,15 @@
-# argparse-pydantic
+# pydantic-argparse-extensible
 
 A typed wrapper for [`argparse`][argparse] leveraging [`pydantic`][pydantic] to
 generate command line interfaces.
 
-The `argparse_pydantic` provides an `ArgModel` class, which inherits from
-`pydantic.BaseModel` and provides a few new methods. For simple arguments,
+The `pydantic_argparse_extensible` provides an `ArgModel` class, which inherits
+from `pydantic.BaseModel` and provides a few new methods. For simple arguments,
 there's not much you need to do:
 
 ```python
 from pydantic import ConfigDict
-from argparse_pydantic import ArgModel
+from pydantic_argparse_extensible import ArgModel
 
 class Args(ArgModel):
     model_config = ConfigDict(use_attribute_docstrings=True)
@@ -57,9 +57,10 @@ class Args(ArgModel):
     github: GitHubArgs
 ```
 
-The power of `argparse_pydantic` lies in letting you opt out of its automatic
-generation logic in order to manually create more complex command-line
-interfaces that aren't supported by `typer` and other alternatives:
+The power of `pydantic_argparse_extensible` lies in letting you opt out of its
+automatic generation logic in order to manually create more complex
+command-line interfaces that aren't supported by `typer` and other
+alternatives:
 
 ```python
 class Address(BaseModel):
@@ -101,7 +102,8 @@ class Args(ArgModel):
         )
 
         # We defined arguments for the `deploy` and `ec2_instances` fields
-        # manually, so we tell `argparse_pydantic` to skip them when generating the CLI.
+        # manually, so we tell `pydantic_argparse_extensible` to skip them when
+        # generating the CLI.
         super().update_argparser(parser, manual={"deploy", "ec2_instances"})
 
     @classmethod
@@ -115,8 +117,8 @@ class Args(ArgModel):
             ]
 
         # We parsed the value for the `ec2_instances` field manually, so we
-        # tell `argparse_pydantic` to ignore the `ec2_instances` attribute on
-        # the `args` when constructing the model.
+        # tell `pydantic_argparse_extensible` to ignore the `ec2_instances`
+        # attribute on the `args` when constructing the model.
         partial = {"ec2_instances": ec2_instances}
         return super().from_parsed_args(args, partial)
 ```
