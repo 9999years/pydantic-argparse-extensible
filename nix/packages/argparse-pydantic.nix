@@ -54,7 +54,7 @@
     ruff = mkCheck "ruff" {
       nativeBuildInputs = [ruff];
       checkPhase = ''
-        ruff
+        ruff check
         ruff format
       '';
     };
@@ -62,7 +62,7 @@
     pylint = mkCheck "pylint" {
       nativeBuildInputs = [pylint];
       checkPhase = ''
-        pylint
+        pylint argparse_pydantic
       '';
     };
   };

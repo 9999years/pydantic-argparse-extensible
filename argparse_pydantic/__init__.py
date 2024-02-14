@@ -1,3 +1,8 @@
+"""
+A typed wrapper for `argparse` leveraging `pydantic` to generate command line
+interfaces.
+"""
+
 from argparse import ArgumentParser, Namespace
 from abc import abstractmethod, ABC
 from typing import Any, Callable, Self
@@ -30,6 +35,7 @@ class ArgModel(BaseModel, ABC):
         The return value (if not `None`) is used as the `type=` argument in the
         corresponding `ArgumentParser.parse_argument` call.
         """
+        # pylint: disable-next=consider-using-in
         if annotation == str or annotation == (str | None):
             return None
         else:
@@ -58,7 +64,8 @@ class ArgModel(BaseModel, ABC):
 
             if field.annotation is None:
                 raise TypeError(f"Field {name!r} of {cls.__name__!r} has no annotation")
-            elif (
+
+            if (
                 # Note: The annotation can be a union like `str | None` which is not a class.
                 isinstance(field.annotation, type)
                 and issubclass(field.annotation, ArgModel)
@@ -102,9 +109,13 @@ class ArgModel(BaseModel, ABC):
         arguments. Fields with values matching keys in `partial` will be
         ignored.
         """
-        ret = dict()
+        if partial is None:
+            partial = {}
+        ret = {}
         for name, field in cls.model_fields.items():
-            if field.annotation is None:
+            if name in partial:
+                ret[name] = partial[name]
+            elif field.annotation is None:
                 ret[name] = getattr(args, name)
             elif issubclass(field.annotation, ArgModel):
                 ret[name] = field.annotation.from_parsed_args(args)
