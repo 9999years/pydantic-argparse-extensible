@@ -67,7 +67,9 @@ jobs:
           extra_nix_config: accept-flake-config = true
 
       - name: Build wheel and sdist
-        run: nix build .#pydantic-argparse-extensible.dist --print-build-logs --out-link dist
+        run: |
+          dest=$(nix build .#pydantic-argparse-extensible.dist --print-build-logs --no-link --print-out-paths)
+          cp -r "$dest" dest
 
       - name: Upload release assets
         uses: actions/upload-artifact@v4
