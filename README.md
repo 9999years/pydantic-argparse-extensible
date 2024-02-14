@@ -39,7 +39,8 @@ if __name__ == "__main__":
 ```
 
 Then, `pydantic` helps ensure that all the data from `argparse` is typed as you
-expect.
+expect. Plus, we get autocompletion for argument fields on the `Args` class, as
+well as hover documentation that matches the CLI `--help` output.
 
 You can use `ArgModel`s as reusable sets of arguments. Here, `Args` will
 include arguments defined on both of the models it includes:
