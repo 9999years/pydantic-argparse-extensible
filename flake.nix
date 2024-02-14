@@ -2,7 +2,10 @@
   description = "Typed wrapper around `argparse` using `pydantic` models";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
-    poetry2nix.url = "github:nix-community/poetry2nix";
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   nixConfig = {
