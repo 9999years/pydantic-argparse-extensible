@@ -122,7 +122,7 @@ class ArgModel(BaseModel, ABC):
         return cls.model_validate(ret)
 
     @classmethod
-    def argparse(
+    def argparse(  # pylint: disable=too-many-arguments
         cls,
         prog: str | None = None,
         usage: str | None = None,
