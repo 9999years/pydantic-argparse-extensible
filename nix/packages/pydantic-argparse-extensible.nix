@@ -19,7 +19,7 @@
     poetryArgs
     // {
       editablePackageSources = {
-        argparse_pydantic = src + "/argparse_pydantic";
+        pydantic_argparse_extensible = src + "/pydantic_argparse_extensible";
       };
     }
   );
@@ -59,7 +59,7 @@
 
     pylint = mkCheck "pylint" {
       checkPhase = ''
-        pylint argparse_pydantic
+        pylint pydantic_argparse_extensible
       '';
     };
   };

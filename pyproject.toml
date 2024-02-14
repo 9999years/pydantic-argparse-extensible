@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "argparse-pydantic"
+name = "pydantic-argparse-extensible"
 version = "0.0.2"
 description = "A typed wrapper around argparse using pydantic models"
 authors = ["Rebecca Turner <rbt@sent.as>"]
@@ -22,7 +22,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 strict = true
-packages = ["argparse_pydantic"]
+packages = ["pydantic_argparse_extensible"]
 
 [tool.pylint."message control"]
 disable = [

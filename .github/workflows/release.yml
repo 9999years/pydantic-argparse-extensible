@@ -67,7 +67,7 @@ jobs:
           extra_nix_config: accept-flake-config = true
 
       - name: Build wheel and sdist
-        run: nix build .#argparse-pydantic.dist --print-build-logs --out-link dist
+        run: nix build .#pydantic-argparse-extensible.dist --print-build-logs --out-link dist
 
       - name: Upload release assets
         uses: actions/upload-artifact@v4
@@ -106,9 +106,9 @@ jobs:
         #     - uses: actions/upload-artifact@v3
         #       with:
         #         name: dist
-        #         path: result/argparse_pydantic-1.0.0-py3-none-any.whl
+        #         path: result/pydantic_argparse_extensible-1.0.0-py3-none-any.whl
         #
-        # will be downloaded to `dist/argparse_pydantic-1.0.0-py3-none-any.whl`.
+        # will be downloaded to `dist/pydantic_argparse_extensible-1.0.0-py3-none-any.whl`.
         uses: actions/download-artifact@v3
 
       - name: Create release

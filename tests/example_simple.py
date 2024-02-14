@@ -1,7 +1,7 @@
 from argparse import ArgumentParser
 
 from pydantic import Field
-from argparse_pydantic import ArgModel
+from pydantic_argparse_extensible import ArgModel
 
 
 class Args(ArgModel):

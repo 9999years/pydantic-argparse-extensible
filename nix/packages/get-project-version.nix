@@ -1,11 +1,11 @@
 {
   writeShellApplication,
-  argparse-pydantic,
+  pydantic-argparse-extensible,
   poetry,
 }:
 writeShellApplication {
   name = "get-project-version";
-  runtimeInputs = [argparse-pydantic.env poetry];
+  runtimeInputs = [pydantic-argparse-extensible.env poetry];
   text = ''
     poetry version --short
   '';
