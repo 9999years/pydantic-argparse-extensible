@@ -126,12 +126,18 @@ class ArgModel(BaseModel, ABC):
         cls,
         prog: str | None = None,
         usage: str | None = None,
+        description: str | None = None,
+        epilog: str | None = None,
+        parser: ArgumentParser | None = None,
     ) -> Self:
         """
         Create an `ArgumentParser` and parse the arguments into an instance of
         this class.
         """
-        parser = ArgumentParser(prog=prog, usage=usage)
+        if parser is None:
+            parser = ArgumentParser(
+                prog=prog, usage=usage, description=description, epilog=epilog
+            )
         cls.update_argparser(parser)
         args = parser.parse_args()
         return cls.from_parsed_args(args)
