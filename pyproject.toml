@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "argparse-pydantic"
+version = "1.0.0"
+description = "A typed wrapper around argparse using pydantic models"
+authors = ["Rebecca Turner <rbt@sent.as>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.6.1"
+
+[tool.poetry.group.dev.dependencies]
+ptpython = "^3.0.26"
+ruff = "^0.2.1"
+mypy = "^1.8.0"
+pylint = "^3.0.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+strict = true
+packages = ["argparse_pydantic"]
