@@ -1,0 +1,8 @@
+---
+# See: https://github.com/marketplace/actions/labeler
+patch:
+  - 'argparse_pydantic/**/*.py'
+  - '**/pyproject.toml'
+  - '**/poetry.lock'
+  - 'flake.nix'
+  - 'flake.lock'
