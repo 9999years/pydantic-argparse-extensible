@@ -29,9 +29,13 @@
 
   mkCheck = name: args:
     stdenv.mkDerivation (
-      {
+      args
+      // {
         name = "${poetryApp.name}-${name}";
-        src = ./.;
+        inherit src;
+
+        nativeBuildInputs = (args.nativeBuildInputs or []) ++ [poetryEnv];
+
         doCheck = true;
         dontConfigure = true;
         dontPatch = true;
@@ -40,19 +44,16 @@
           touch $out
         '';
       }
-      // args
     );
 
   checks = {
     mypy = mkCheck "mypy" {
-      nativeBuildInputs = [mypy];
       checkPhase = ''
         mypy
       '';
     };
 
     ruff = mkCheck "ruff" {
-      nativeBuildInputs = [ruff];
       checkPhase = ''
         ruff check
         ruff format
@@ -60,7 +61,6 @@
     };
 
     pylint = mkCheck "pylint" {
-      nativeBuildInputs = [pylint];
       checkPhase = ''
         pylint argparse_pydantic
       '';
