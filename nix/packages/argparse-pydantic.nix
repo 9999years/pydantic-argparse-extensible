@@ -4,9 +4,6 @@
   poetry,
   poetry2nix,
   python312,
-  mypy,
-  ruff,
-  pylint,
 }: let
   src = ../..;
 
