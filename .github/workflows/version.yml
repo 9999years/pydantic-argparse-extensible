@@ -55,6 +55,8 @@ jobs:
     needs:
       - if_merged
       - bump_type
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -65,10 +67,7 @@ jobs:
 
       - uses: cachix/install-nix-action@v22
         with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          extra_nix_config: |
-            extra-experimental-features = nix-command flakes
-            accept-flake-config = true
+          extra_nix_config: accept-flake-config = true
 
       - name: Get old version number
         id: old_project_version

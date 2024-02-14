@@ -16,6 +16,8 @@ jobs:
     name: Check that PR was merged and not closed
     if: github.event.pull_request.merged == true
       && contains(github.event.pull_request.labels.*.name, 'release')
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - run: |
@@ -83,6 +85,9 @@ jobs:
       - if_merged
       - pypi-publish
       - version
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - name: Tag the release
         uses: mathieudutour/github-tag-action@v6.0
