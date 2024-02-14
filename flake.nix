@@ -32,6 +32,7 @@
         get-project-version
         make-release-commit
         ;
+      inherit (localPkgs.argparse-pydantic) dist;
     });
 
     checks = forAllSystems (system: self.packages.${system}.default.checks);
