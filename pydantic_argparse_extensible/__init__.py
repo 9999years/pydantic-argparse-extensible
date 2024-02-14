@@ -122,16 +122,22 @@ class ArgModel(BaseModel, ABC):
         return cls.model_validate(ret)
 
     @classmethod
-    def argparse(
+    def argparse(  # pylint: disable=too-many-arguments
         cls,
         prog: str | None = None,
         usage: str | None = None,
+        description: str | None = None,
+        epilog: str | None = None,
+        parser: ArgumentParser | None = None,
     ) -> Self:
         """
         Create an `ArgumentParser` and parse the arguments into an instance of
         this class.
         """
-        parser = ArgumentParser(prog=prog, usage=usage)
+        if parser is None:
+            parser = ArgumentParser(
+                prog=prog, usage=usage, description=description, epilog=epilog
+            )
         cls.update_argparser(parser)
         args = parser.parse_args()
         return cls.from_parsed_args(args)
