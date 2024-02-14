@@ -30,6 +30,7 @@
         (localPkgs)
         argparse-pydantic
         get-project-version
+        make-release-commit
         ;
     });
 
