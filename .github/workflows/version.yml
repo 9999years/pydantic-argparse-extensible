@@ -96,7 +96,7 @@ jobs:
           base: main
           title: Release version ${{ steps.new_project_version.outputs.version }}
           body: |
-            Update version to ${{ steps.new_project_version.outputs.version }} with [cargo-release](https://github.com/crate-ci/cargo-release).
+            Update version to ${{ steps.new_project_version.outputs.version }}.
             Merge this PR to build and publish a new release.
           labels: release
 
