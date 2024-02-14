@@ -68,8 +68,8 @@ jobs:
 
       - name: Build wheel and sdist
         run: |
-          dest=$(nix build .#pydantic-argparse-extensible.dist --print-build-logs --no-link --print-out-paths)
-          cp -r "$dest" dest
+          dist=$(nix build .#pydantic-argparse-extensible.dist --print-build-logs --no-link --print-out-paths)
+          cp -r "$dist" dist
 
       - name: Upload release assets
         uses: actions/upload-artifact@v4
