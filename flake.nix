@@ -5,6 +5,12 @@
     poetry2nix.url = "github:nix-community/poetry2nix";
   };
 
+  nixConfig = {
+    extra-substituters = ["https://cache.garnix.io"];
+    extra-trusted-substituters = ["https://cache.garnix.io"];
+    extra-trusted-public-keys = ["cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="];
+  };
+
   outputs = {
     self,
     nixpkgs,
@@ -18,10 +24,15 @@
         poetry2nix.overlays.default
       ];
       localPkgs = pkgs.callPackage ./nix/makePackages.nix {};
-      inherit (localPkgs) argparse-pydantic;
     in {
-      inherit argparse-pydantic;
-      default = argparse-pydantic;
+      default = localPkgs.argparse-pydantic;
+      inherit
+        (localPkgs)
+        argparse-pydantic
+        get-project-version
+        make-release-commit
+        ;
+      inherit (localPkgs.argparse-pydantic) dist;
     });
 
     checks = forAllSystems (system: self.packages.${system}.default.checks);

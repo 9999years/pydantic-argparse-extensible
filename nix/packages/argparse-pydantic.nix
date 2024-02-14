@@ -38,7 +38,7 @@
         dontPatch = true;
         dontBuild = true;
         installPhase = ''
-          touch $out
+          touch "$out"
         '';
       }
     );
@@ -70,12 +70,33 @@ in
         (old.passthru or {})
         // {
           inherit checks;
+
+          env = poetryEnv;
           devShell = mkShell {
             inputsFrom = builtins.attrValues checks;
             packages = [
               poetry
               poetryEnv
             ];
+          };
+
+          dist = stdenv.mkDerivation {
+            inherit (poetryApp) name;
+            inherit src;
+
+            nativeBuildInputs = [poetryEnv poetry];
+
+            dontConfigure = true;
+
+            buildPhase = ''
+              export HOME=$(pwd)
+              poetry build
+            '';
+
+            installPhase = ''
+              mkdir "$out"
+              cp -r dist/* "$out/"
+            '';
           };
         };
     }
