@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "argparse-pydantic"
-version = "0.0.1"
+version = "0.0.2"
 description = "A typed wrapper around argparse using pydantic models"
 authors = ["Rebecca Turner <rbt@sent.as>"]
 license = "MIT"
