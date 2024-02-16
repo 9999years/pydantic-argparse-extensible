@@ -3,7 +3,7 @@ A typed wrapper for `argparse` leveraging `pydantic` to generate command line
 interfaces.
 """
 
-from argparse import ArgumentParser, Namespace
+from argparse import ArgumentParser, Namespace, _ActionsContainer
 from abc import abstractmethod, ABC
 from typing import Any, Callable, Self, get_origin, get_args, Union
 from types import UnionType, NoneType
@@ -47,7 +47,7 @@ class ArgModel(BaseModel, ABC):
     @classmethod
     @abstractmethod
     def update_argparser(
-        cls, parser: ArgumentParser, manual: set[str] | None = None
+        cls, parser: _ActionsContainer, manual: set[str] | None = None
     ) -> None:
         """
         Add arguments corresponding to this class's fields to the given
