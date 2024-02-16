@@ -5,7 +5,8 @@ interfaces.
 
 from argparse import ArgumentParser, Namespace
 from abc import abstractmethod, ABC
-from typing import Any, Callable, Self
+from typing import Any, Callable, Self, get_origin, get_args, Union
+from types import UnionType, NoneType
 
 from pydantic import BaseModel
 from pydantic_core import PydanticUndefined
@@ -38,6 +39,8 @@ class ArgModel(BaseModel, ABC):
         # pylint: disable-next=consider-using-in
         if annotation == str or annotation == (str | None):
             return None
+        if (optional := _get_optional_type(annotation)) is not None:
+            return optional
         else:
             return annotation  # type: ignore
 
@@ -143,3 +146,23 @@ class ArgModel(BaseModel, ABC):
         cls.update_argparser(parser)
         args = parser.parse_args()
         return cls.from_parsed_args(args)
+
+
+def _get_optional_type(annotation: Any) -> type | None:
+    """For a given type annotation, if the annotation is of the form `T |
+    None`, return `T`.
+
+    For non-union annotations, or unions of more than two types, return `None`.
+    """
+    origin = get_origin(annotation)
+    if origin is not Union and origin is not UnionType:
+        return None
+
+    args = get_args(annotation)
+    if len(args) != 2:
+        return None
+
+    if args[0] is NoneType:
+        return args[1]  # type: ignore
+    else:
+        return args[0]  # type: ignore
