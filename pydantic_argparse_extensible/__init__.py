@@ -74,10 +74,12 @@ class ArgModel(BaseModel, ABC):
             else:
                 kwargs: dict[str, Any] = {}
 
-                if (
-                    arg_type := cls.annotation_to_argument_type(field.annotation)
-                ) is not None:
+                arg_type = cls.annotation_to_argument_type(field.annotation)
+                if arg_type is not None:
                     kwargs["type"] = arg_type
+
+                    if arg_type == bool:
+                        kwargs["action"] = "store_true"
 
                 if field.description is not None:
                     kwargs["help"] = field.description
