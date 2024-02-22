@@ -73,7 +73,7 @@ class ArgModel(BaseModel):
             ):
                 field.annotation.update_argparser(parser)
             else:
-                kwargs: dict[str, Any] = {}
+                kwargs: dict[str, Any] = {"dest": name}
 
                 arg_type = cls.annotation_to_argument_type(field.annotation)
                 if arg_type is not None:
