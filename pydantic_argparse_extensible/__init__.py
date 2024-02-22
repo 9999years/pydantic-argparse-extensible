@@ -121,6 +121,9 @@ class ArgModel(BaseModel):
                 ret[name] = getattr(args, name)
             elif issubclass(field.annotation, ArgModel):
                 ret[name] = field.annotation.from_parsed_args(args)
+            else:
+                # Has an annotation.
+                ret[name] = getattr(args, name)
         return cls.model_validate(ret)
 
     @classmethod
