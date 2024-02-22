@@ -4,7 +4,6 @@ interfaces.
 """
 
 from argparse import ArgumentParser, Namespace, _ActionsContainer
-from abc import abstractmethod, ABC
 from typing import Any, Callable, Self, get_origin, get_args, Union
 from types import UnionType, NoneType
 
@@ -12,7 +11,7 @@ from pydantic import BaseModel
 from pydantic_core import PydanticUndefined
 
 
-class ArgModel(BaseModel, ABC):
+class ArgModel(BaseModel):
     """
     Typed wrapper around an `ArgumentParser`.
     """
@@ -45,7 +44,6 @@ class ArgModel(BaseModel, ABC):
             return annotation  # type: ignore
 
     @classmethod
-    @abstractmethod
     def update_argparser(
         cls, parser: _ActionsContainer, manual: set[str] | None = None
     ) -> None:
@@ -98,7 +96,6 @@ class ArgModel(BaseModel, ABC):
                 parser.add_argument(cls.field_name_to_argument_name(name), **kwargs)
 
     @classmethod
-    @abstractmethod
     def from_parsed_args(
         cls, args: Namespace, partial: dict[str, Any] | None = None
     ) -> Self:
