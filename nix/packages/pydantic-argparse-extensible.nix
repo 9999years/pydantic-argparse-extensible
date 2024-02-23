@@ -62,6 +62,12 @@
         pylint pydantic_argparse_extensible
       '';
     };
+
+    pytest = mkCheck "pytest" {
+      checkPhase = ''
+        pytest -v --cov
+      '';
+    };
   };
 in
   poetryApp.overrideAttrs (
