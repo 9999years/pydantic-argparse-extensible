@@ -1,0 +1,11 @@
+# serializer version: 1
+# name: test_help
+  '''
+  usage: pytest [-h] --user USER
+  
+  options:
+    -h, --help   show this help message and exit
+    --user USER  The username to connect to.
+  
+  '''
+# ---

@@ -4,7 +4,7 @@ interfaces.
 """
 
 from argparse import ArgumentParser, Namespace, _ActionsContainer
-from typing import Any, Callable, Self, get_origin, get_args, Union
+from typing import Any, Callable, Self, Sequence, get_origin, get_args, Union
 from types import UnionType, NoneType
 
 from pydantic import BaseModel
@@ -28,7 +28,9 @@ class ArgModel(BaseModel):
         return "--" + field_name.replace("_", "-")
 
     @classmethod
-    def annotation_to_argument_type(cls, annotation: Any) -> Callable[[], Any] | None:
+    def annotation_to_argument_type(
+        cls, field_name: str, annotation: Any
+    ) -> Callable[[], Any] | None:
         """
         Convert a field type annotation to an argument type function.
 
@@ -38,10 +40,13 @@ class ArgModel(BaseModel):
         # pylint: disable-next=consider-using-in
         if annotation == str or annotation == (str | None):
             return None
-        if (optional := _get_optional_type(annotation)) is not None:
+        elif (optional := _get_optional_type(annotation)) is not None:
             return optional
-        else:
+        elif callable(annotation):
             return annotation  # type: ignore
+        else:
+            message = f"Annotation is not callable: {annotation} on field {cls.__name__}.{field_name}"
+            raise TypeError(message)
 
     @classmethod
     def update_argparser(
@@ -63,8 +68,9 @@ class ArgModel(BaseModel):
             if name in manual:
                 continue
 
-            if field.annotation is None:
-                raise TypeError(f"Field {name!r} of {cls.__name__!r} has no annotation")
+            if field.annotation is None:  # pragma: no cover
+                # I'm pretty sure this is unreachable, but the type annotations say otherwise.
+                raise TypeError(f"Field {cls.__name__}.{name} has no annotation")
 
             if (
                 # Note: The annotation can be a union like `str | None` which is not a class.
@@ -83,7 +89,9 @@ class ArgModel(BaseModel):
                 else:
                     kwargs["required"] = True
 
-                arg_type = cls.annotation_to_argument_type(field.annotation)
+                arg_type = cls.annotation_to_argument_type(
+                    field_name=name, annotation=field.annotation
+                )
                 if arg_type is not None:
                     if arg_type == bool:
                         kwargs["action"] = "store_true"
@@ -118,12 +126,17 @@ class ArgModel(BaseModel):
         for name, field in cls.model_fields.items():
             if name in partial:
                 ret[name] = partial[name]
-            elif field.annotation is None:
+            elif field.annotation is None:  # pragma: no cover
+                # I'm pretty sure this is unreachable, but the type annotations say otherwise.
                 ret[name] = getattr(args, name)
-            elif issubclass(field.annotation, ArgModel):
-                ret[name] = field.annotation.from_parsed_args(args)
+            elif isinstance(field.annotation, type):
+                # Annotated with a simple type (and not e.g. a union).
+                if issubclass(field.annotation, ArgModel):
+                    ret[name] = field.annotation.from_parsed_args(args)
+                else:
+                    ret[name] = getattr(args, name)
             else:
-                # Has an annotation.
+                # Annotated with something complex like a union.
                 ret[name] = getattr(args, name)
         return cls.model_validate(ret)
 
@@ -135,6 +148,7 @@ class ArgModel(BaseModel):
         description: str | None = None,
         epilog: str | None = None,
         parser: ArgumentParser | None = None,
+        args: Sequence[str] | None = None,
     ) -> Self:
         """
         Create an `ArgumentParser` and parse the arguments into an instance of
@@ -145,8 +159,8 @@ class ArgModel(BaseModel):
                 prog=prog, usage=usage, description=description, epilog=epilog
             )
         cls.update_argparser(parser)
-        args = parser.parse_args()
-        return cls.from_parsed_args(args)
+        parsed_args = parser.parse_args(args=args)
+        return cls.from_parsed_args(parsed_args)
 
 
 def _get_optional_type(annotation: Any) -> type | None:

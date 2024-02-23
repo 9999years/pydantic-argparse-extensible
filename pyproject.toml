@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.11"
+python = ">=3.11,<4"
 pydantic = "^2.6.1"
 
 [tool.poetry.group.dev.dependencies]
@@ -15,6 +15,9 @@ ptpython = "^3.0.26"
 ruff = "^0.2.1"
 mypy = "^1.8.0"
 pylint = "^3.0.3"
+pytest = "^8.0.1"
+pytest-cov = "^4.1.0"
+syrupy = "^4.6.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -29,3 +32,13 @@ disable = [
     "no-else-return",
     "line-too-long",
 ]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+include = [
+    "pydantic_argparse_extensible/**",
+]
+fail_under = 100
+show_missing = true

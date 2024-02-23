@@ -1,0 +1,12 @@
+# serializer version: 1
+# name: test_required
+  '''
+  usage: pytest [-h] --user USER --host HOST
+  
+  options:
+    -h, --help   show this help message and exit
+    --user USER  The username to connect to.
+    --host HOST  The host to connect to.
+  
+  '''
+# ---

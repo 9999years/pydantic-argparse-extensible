@@ -1,0 +1,11 @@
+# serializer version: 1
+# name: test_help
+  '''
+  usage: pytest [-h] [--infile INFILE]
+  
+  options:
+    -h, --help       show this help message and exit
+    --infile INFILE
+  
+  '''
+# ---

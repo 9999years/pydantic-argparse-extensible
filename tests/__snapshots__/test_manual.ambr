@@ -1,0 +1,12 @@
+# serializer version: 1
+# name: test_help
+  '''
+  usage: pytest [-h] [--my-user-flag MY_USER_FLAG]
+  
+  options:
+    -h, --help            show this help message and exit
+    --my-user-flag MY_USER_FLAG
+                          Put the username here :)
+  
+  '''
+# ---

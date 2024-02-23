@@ -1,0 +1,15 @@
+# serializer version: 1
+# name: test_default_argparser
+  '''
+  usage: puppy [-h] --user USER --host HOST
+  puppy: error: the following arguments are required: --user, --host
+  
+  '''
+# ---
+# name: test_required
+  '''
+  usage: pytest [-h] --user USER --host HOST
+  pytest: error: the following arguments are required: --user, --host
+  
+  '''
+# ---
