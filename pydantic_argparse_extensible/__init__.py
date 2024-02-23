@@ -75,16 +75,6 @@ class ArgModel(BaseModel):
             else:
                 kwargs: dict[str, Any] = {"dest": name}
 
-                arg_type = cls.annotation_to_argument_type(field.annotation)
-                if arg_type is not None:
-                    if arg_type == bool:
-                        kwargs["action"] = "store_true"
-                    else:
-                        kwargs["type"] = arg_type
-
-                if field.description is not None:
-                    kwargs["help"] = field.description
-
                 if (
                     field.default is not PydanticUndefined
                     or field.default_factory is not None
@@ -92,6 +82,17 @@ class ArgModel(BaseModel):
                     kwargs["default"] = field.get_default(call_default_factory=True)
                 else:
                     kwargs["required"] = True
+
+                arg_type = cls.annotation_to_argument_type(field.annotation)
+                if arg_type is not None:
+                    if arg_type == bool:
+                        kwargs["action"] = "store_true"
+                        kwargs["required"] = False
+                    else:
+                        kwargs["type"] = arg_type
+
+                if field.description is not None:
+                    kwargs["help"] = field.description
 
                 parser.add_argument(cls.field_name_to_argument_name(name), **kwargs)
 
