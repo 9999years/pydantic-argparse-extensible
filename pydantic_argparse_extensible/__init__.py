@@ -128,15 +128,12 @@ class ArgModel(BaseModel):
                 ret[name] = partial[name]
             elif field.annotation is None:  # pragma: no cover
                 # I'm pretty sure this is unreachable, but the type annotations say otherwise.
-                ret[name] = getattr(args, name)
-            elif isinstance(field.annotation, type):
-                # Annotated with a simple type (and not e.g. a union).
-                if issubclass(field.annotation, ArgModel):
-                    ret[name] = field.annotation.from_parsed_args(args)
-                else:
-                    ret[name] = getattr(args, name)
-            else:
-                # Annotated with something complex like a union.
+                raise TypeError(f"Field {cls.__name__}.{name} has no annotation")
+            elif isinstance(field.annotation, type) and issubclass(
+                field.annotation, ArgModel
+            ):
+                ret[name] = field.annotation.from_parsed_args(args)
+            elif hasattr(args, name):
                 ret[name] = getattr(args, name)
         return cls.model_validate(ret)
 
